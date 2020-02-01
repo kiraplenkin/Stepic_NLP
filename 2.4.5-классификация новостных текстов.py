@@ -1,5 +1,7 @@
 import numbers as np
 import re
+from collections import defaultdict
+
 
 TOKENIZE_RE = re.compile(r'[\w\d]+', re.I)
 
