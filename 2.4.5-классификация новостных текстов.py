@@ -1,4 +1,4 @@
-import numbers as np
+import numpy as np
 import re
 from collections import defaultdict
 
