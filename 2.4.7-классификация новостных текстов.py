@@ -51,14 +51,13 @@ for text_id, text in enumerate(docs):
         if token in word2id:
             feature_matrix[text_id, word2id[token]] += 1
 
-tf = feature_matrix.tocsr()
-tf = tf.multiply(1 / tf.sum(1))
+feature_matrix = feature_matrix.tocsr()
+feature_matrix = feature_matrix.multiply(1 / feature_matrix.sum(1))
+feature_matrix = feature_matrix + np.ones((len(docs), len(word2id)))
+feature_matrix = dok_matrix(np.log(feature_matrix))
 
-idf = feature_matrix
-idf = (idf > 0).astype('float32').multiply(1 / word2freq)
+feature_matrix = feature_matrix.toarray()
+feature_matrix -= feature_matrix.mean(0)
+feature_matrix /= feature_matrix.std(0, ddof=1)
 
-lTFIDF = np.log1p(tf).multiply(idf)
-feats_std = lTFIDF.toarray().std(0, ddof=1)
-lTFIDF = lTFIDF.multiply(lTFIDF.mean(1) / feats_std)
-
-print(lTFIDF.toarray())
+print(feature_matrix, sep=' ')
